@@ -10,14 +10,10 @@ const useFetchGifs = (category) => {
   useEffect(() => {
     getBooks(category).then(book =>{
         
-        setTimeout(() => {
             setstate({
                 data:book,
                 loading: false
             });
-        },1000)
-        
-      
     });
   }, [category]);
 

@@ -85,21 +85,6 @@ export default function Search() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  // funciones que escuchan el search
-
-  const [inputValue, setInputValue] = useState("");
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    getBooks(inputValue);
-  };
-
-  //-----------------------------------------
-
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -173,6 +158,21 @@ export default function Search() {
       </MenuItem>
     </Menu>
   );
+
+    // funciones que escuchan el search
+
+    const [inputValue, setInputValue] = useState("");
+
+    const handleInputChange = (e) => {
+      setInputValue(e.target.value);
+      console.log(e.target.value);
+    };
+  
+    const handleSubmit = (e) => {
+      getBooks(inputValue);
+    };
+  
+    //-----------------------------------------
 
   return (
     <form onSubmit={handleSubmit}>
