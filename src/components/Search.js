@@ -247,7 +247,7 @@ export default function Search() {
         {renderMenu}
       </div>
     </form>
-      <div>
+      <div className="enhancedtable">
           <EnhancedTable data={data} />
     </div>
     </>

@@ -24,8 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Navbar() {
+export default function Navbar({datacheck}) {
   const classes = useStyles();
+console.log(datacheck,'datacheck')
 
   return (
     <div className={classes.root}>
@@ -34,7 +35,7 @@ export default function Navbar() {
           <Typography variant="h6" className={classes.title}>
             BIBLIOTECA ESCOLAR
           </Typography>
-          <Button color="inherit"><FiIcons.FiSave /></Button>
+          <Button color="inherit" onClick><FiIcons.FiSave /></Button>
           <Button color="inherit"><FaIcons.FaDownload /></Button>
         </Toolbar>
       </AppBar>

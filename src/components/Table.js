@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import "../App.css";
 import clsx from "clsx";
 import { lighten, makeStyles, useTheme } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -15,35 +16,53 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import * as AiIcons from "react-icons/ai";
+import * as BiIcons from "react-icons/bi";
 import Button from "@material-ui/core/Button";
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Drawer from "@material-ui/core/Drawer";
+import Divider from "@material-ui/core/Divider";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ModalTableColums from "./ModalTableColums";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import BookImg from "./BookImg";
 
+//------Modal------
+
+const useStylesModal = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
+//------Modal------
 
 //------DRAWER------
 const drawerWidth = 240;
 
 const useStylesDrawer = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
+    transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -53,7 +72,7 @@ const useStylesDrawer = makeStyles((theme) => ({
     flexGrow: 1,
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
@@ -63,24 +82,24 @@ const useStylesDrawer = makeStyles((theme) => ({
     width: drawerWidth,
   },
   drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginRight: -drawerWidth,
   },
   contentShift: {
-    transition: theme.transitions.create('margin', {
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -88,7 +107,6 @@ const useStylesDrawer = makeStyles((theme) => ({
   },
 }));
 //------DRAWER------
-
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -116,27 +134,23 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const headCells = [
-  { id: "tittle", numeric: false, disablePadding: true, label: "Title" },
-  { id: "subtitle", numeric: true, disablePadding: false, label: "Subtitle" },
-  { id: "isbn13", numeric: true, disablePadding: false, label: "Isbn13" },
-  { id: "price", numeric: true, disablePadding: false, label: "Price" },
-  { id: "url", numeric: true, disablePadding: false, label: "Url" },
-];
+const columsCheck = localStorage.getItem("");
 
-function EnhancedTableHead(props) {
-  const {
-    classes,
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+console.log(columsCheck, "122Ayuda");
+
+export function EnhancedTableHead(props) {
+  const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+
+  const headCells = [
+    { id: 1, numeric: false, disablePadding: true, label: "Title" },
+    { id: 2, numeric: true, disablePadding: false, label: "Subtitle" },
+    { id: 3, numeric: true, disablePadding: false, label: "Isbn13" },
+    { id: 4, numeric: true, disablePadding: false, label: "Price" },
+    { id: 5, numeric: true, disablePadding: false, label: "Url" },
+  ];
 
   return (
     <TableHead>
@@ -242,7 +256,9 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Button color="inherit"><AiIcons.AiOutlinePlus /></Button>
+        <Button color="inherit">
+          <AiIcons.AiOutlinePlus />
+        </Button>
       )}
     </Toolbar>
   );
@@ -278,6 +294,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EnhancedTable({ data }) {
   const classes = useStyles();
+  const classesModal = useStylesModal();
+  const [openModal, setOpenModal] = React.useState(false);
   const classesDrawer = useStylesDrawer();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -289,23 +307,27 @@ export default function EnhancedTable({ data }) {
 
   console.log(data, "data en table");
 
-  const handleDrawerOpen = () => {
-  setOpen(true);
-};
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
 
-const handleDrawerClose = () => {
-  setOpen(false);
-};
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
   function createData(title, subtitle, isbn13, price, url) {
     return { title, subtitle, isbn13, price, url };
   }
 
-  const rows = [
-    createData(
-     
-    )
-  ];
+  const rows = [createData()];
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -359,6 +381,13 @@ const handleDrawerClose = () => {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
+        <Button
+          color="inherit"
+          onClick={handleDrawerOpen}
+          className={clsx(open && classesDrawer.hide)}
+        >
+          <AiIcons.AiOutlinePlus />
+        </Button>
         <TableContainer>
           <Table
             className={classes.table}
@@ -384,25 +413,42 @@ const handleDrawerClose = () => {
 
                   return (
                     <>
-                     {data.map((books) => {
-                          return (
-                            <>
-                      <TableRow
-                        hover
-                        onClick={(event) => handleClick(event, row.name)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={row.name}
-                        selected={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          {/* <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        /> */}
-                        </TableCell>
-                       
+                      {data.map((books) => {
+                        return (
+                          <>
+                            <TableRow
+                              hover
+                              onClick={(event) => handleClick(event, row.name)}
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={row.name}
+                              selected={isItemSelected}
+                            >
+                              <TableCell padding="checkbox">
+                                <Button color="inherit" onClick={handleOpen}>
+                                  <BiIcons.BiBookBookmark />
+                                </Button>
+                              </TableCell>
+                              <Modal
+                                aria-labelledby="transition-modal-title"
+                                aria-describedby="transition-modal-description"
+                                className={classesModal.modal}
+                                open={openModal}
+                                onClose={handleClose}
+                                closeAfterTransition
+                                BackdropComponent={Backdrop}
+                                BackdropProps={{
+                                  timeout: 500,
+                                }}
+                              >
+                                <Fade in={openModal}>
+                                  <div className={classesModal.paper}>
+                                  <BookImg img={books.image} />
+                                  </div>
+                                </Fade>
+                              </Modal>
+
                               <TableCell
                                 component="th"
                                 id={labelId}
@@ -414,18 +460,20 @@ const handleDrawerClose = () => {
                               <TableCell align="right">
                                 {books.subtitle}
                               </TableCell>
-                              <TableCell align="right">{books.isbn13}</TableCell>
+                              <TableCell className="isbn" align="right">
+                                {books.isbn13}
+                              </TableCell>
                               <TableCell align="right">{books.price}</TableCell>
                               <TableCell align="right">{books.url}</TableCell>
-                      </TableRow>
+                            </TableRow>
                           </>
-                          );
-                        })}
+                        );
+                      })}
                     </>
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (33) * emptyRows }}>
+                <TableRow style={{ height: 33 * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -453,11 +501,15 @@ const handleDrawerClose = () => {
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === "rtl" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
-       <ModalTableColums/>
+        <ModalTableColums />
       </Drawer>
     </div>
   );
