@@ -1,5 +1,4 @@
 import './App.css';
-import Body from './Body';
 import Navbar from './components/Navbar';
 import Search from './components/Search';
 
@@ -8,7 +7,6 @@ function App() {
     <div className="App">
      <Navbar/>
      <Search/>
-     <Body/>
     </div>
   );
 }

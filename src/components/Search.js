@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import EnhancedTable from "./Table";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,11 +12,27 @@ import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import axios from 'axios';
+import Paper from '@material-ui/core/Paper';
+
 
 const API = `https://api.itbook.store/1.0/search/`;
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(12, 1fr)',
+    gridGap: theme.spacing(3),
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    whiteSpace: 'nowrap',
+    marginBottom: theme.spacing(1),
+  },
+  divider: {
+    margin: theme.spacing(2, 0),
+  },
   grow: {
     flexGrow: 1,
   },
@@ -192,9 +209,12 @@ export default function Search() {
     });
   };
 
+  const { data, loading } = state;
+
   //-----------------------------------------
 
   return (
+    <>
     <form onSubmit={handleSubmit}>
       <div className={classes.grow}>
         <AppBar position="static">
@@ -225,5 +245,17 @@ export default function Search() {
         {renderMenu}
       </div>
     </form>
+      <div>
+      <div className={classes.container}>
+        <div style={{ gridColumnEnd: 'span 8' }}>
+          <EnhancedTable data={data} />
+        </div>
+        <div style={{ gridColumnEnd: 'span 4' }}>
+          <Paper className={classes.paper}>xs=4</Paper>
+          <h1>soy el 4</h1>
+        </div>
+      </div>
+    </div>
+    </>
   );
 }
