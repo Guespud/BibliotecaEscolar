@@ -1,6 +1,6 @@
-export const getBooks = async (book) => {
-    const url = `https://api.itbook.store/1.0/search/${encodeURI(book)}`;
-    const resp = await fetch(url);
+const GetBooks = async (search = 'sql') => {
+    // const url = `https://api.itbook.store/1.0/search/${encodeURI(search)}`;
+    const resp = await fetch(`https://api.itbook.store/1.0/search/${encodeURI(search)}`);
     const { data } = await resp.json();
   
     const books = data.map((book) => {
@@ -16,3 +16,5 @@ export const getBooks = async (book) => {
 
     return books;
   };
+
+  export default GetBooks;

@@ -11,7 +11,9 @@ import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { getBooks } from "../helpers/GetBooks";
+import axios from 'axios';
+
+const API = `https://api.itbook.store/1.0/search/`;
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -159,48 +161,69 @@ export default function Search() {
     </Menu>
   );
 
-    // funciones que escuchan el search
+  // funciones que escuchan el search
 
-    const [inputValue, setInputValue] = useState("");
+  const [state, setState] = useState({
+    data: [],
+    loading: true,
+    searchTerm: "",
+    error: "",
+  });
 
-    const handleInputChange = (e) => {
-      setInputValue(e.target.value);
-      console.log(e.target.value);
-    };
-  
-    const handleSubmit = (e) => {
-      getBooks(inputValue);
-    };
-  
-    //-----------------------------------------
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (state.searchTerm === "") {
+      return setState({ ...state, error: "Por favor escribe un texto valido" });
+    }
+
+    const response = await fetch(`${API}${state.searchTerm}`)
+    const data = await response.json();
+    console.log(data.books,'data api');
+
+    if (!data) {
+      return setState({ ...state, error: "No se encontraron resultados." });
+    }
+
+    return setState({
+      data: data.books,
+      searchTerm: "",
+      error: "",
+    });
+  };
+
+  //-----------------------------------------
 
   return (
     <form onSubmit={handleSubmit}>
-    <div className={classes.grow}>
-      <AppBar position="static">
-        <Toolbar>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+      <div className={classes.grow}>
+        <AppBar position="static">
+          <Toolbar>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                type="text"
+                onChange={(e) =>
+                  setState({ ...state, searchTerm: e.target.value })
+                }
+                value={state.searchTerm}
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
             </div>
-            <InputBase
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-          <div className={classes.grow} />
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </div>
-      </form>
+            <p className="text-white">{state.error ? state.error : ""}</p>
+            <div className={classes.grow} />
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+      </div>
+    </form>
   );
 }

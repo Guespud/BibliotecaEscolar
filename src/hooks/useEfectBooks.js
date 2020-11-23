@@ -1,23 +1,24 @@
 import { useEffect,useState } from "react";
-import {getBooks} from '../helpers/GetBooks';
+import { GetBooks } from "../helpers/GetBooks";
 
-const useFetchGifs = (category) => {
+
+const useFetchBooks = (category) => {
   const [state, setstate] = useState({
     data: [],
     loading: true,
   });
 
-  useEffect(() => {
-    getBooks(category).then(book =>{
+  // useEffect(() => {
+  //   GetBooks(category).then(book =>{
         
-            setstate({
-                data:book,
-                loading: false
-            });
-    });
-  }, [category]);
+  //           setstate({
+  //               data:book,
+  //               loading: false
+  //           });
+  //   });
+  // }, [category]);
 
   return state;
 };
 
-export default useFetchGifs;
+export default useFetchBooks;
