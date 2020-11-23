@@ -1,6 +1,7 @@
 import './App.css';
 import Navbar from './components/Navbar';
 import Search from './components/Search';
+import Body from './Body'
 
 function App() {
   return (

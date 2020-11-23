@@ -4,6 +4,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import * as FiIcons from "react-icons/fi";
+import * as FaIcons from "react-icons/fa";
 
 const useStyles = makeStyles((theme) => ({
   palette: {
@@ -32,7 +34,8 @@ export default function Navbar() {
           <Typography variant="h6" className={classes.title}>
             BIBLIOTECA ESCOLAR
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit"><FiIcons.FiSave /></Button>
+          <Button color="inherit"><FaIcons.FaDownload /></Button>
         </Toolbar>
       </AppBar>
     </div>

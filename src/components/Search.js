@@ -12,7 +12,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import Paper from '@material-ui/core/Paper';
+import ModalTableColums from "./ModalTableColums";
 
 
 const API = `https://api.itbook.store/1.0/search/`;
@@ -190,13 +190,15 @@ export default function Search() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    localStorage.setItem('searchTerm',state.searchTerm);
+
     if (state.searchTerm === "") {
       return setState({ ...state, error: "Por favor escribe un texto valido" });
     }
 
     const response = await fetch(`${API}${state.searchTerm}`)
     const data = await response.json();
-    console.log(data.books,'data api');
+    console.log(data,'data api');
 
     if (!data) {
       return setState({ ...state, error: "No se encontraron resultados." });
@@ -246,15 +248,7 @@ export default function Search() {
       </div>
     </form>
       <div>
-      <div className={classes.container}>
-        <div style={{ gridColumnEnd: 'span 8' }}>
           <EnhancedTable data={data} />
-        </div>
-        <div style={{ gridColumnEnd: 'span 4' }}>
-          <Paper className={classes.paper}>xs=4</Paper>
-          <h1>soy el 4</h1>
-        </div>
-      </div>
     </div>
     </>
   );
