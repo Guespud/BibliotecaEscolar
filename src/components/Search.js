@@ -198,7 +198,6 @@ export default function Search() {
 
     const response = await fetch(`${API}${state.searchTerm}`)
     const data = await response.json();
-    console.log(data,'data api');
 
     if (!data) {
       return setState({ ...state, error: "No se encontraron resultados." });

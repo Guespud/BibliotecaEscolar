@@ -28,7 +28,6 @@ export default function ModalTableColums() {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
 
-  console.log(checked, "checkeados");
   localStorage.setItem('booksChecked',checked);
 
   const handleToggle = (value) => () => {

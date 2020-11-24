@@ -136,8 +136,6 @@ function stableSort(array, comparator) {
 
 const columsCheck = localStorage.getItem("");
 
-console.log(columsCheck, "122Ayuda");
-
 export function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
@@ -314,9 +312,7 @@ export default function EnhancedTable({ data }) {
     price:true,
     url:true,
 
-  })
-
-  console.log(data, "data en table");
+  });
 
   const handleOpen = () => {
     setOpenModal(true);
@@ -348,7 +344,7 @@ export default function EnhancedTable({ data }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.tittle);
       setSelected(newSelecteds);
       return;
     }
@@ -387,7 +383,7 @@ export default function EnhancedTable({ data }) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -419,7 +415,7 @@ export default function EnhancedTable({ data }) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.title);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -429,11 +425,11 @@ export default function EnhancedTable({ data }) {
                           <>
                             <TableRow
                               hover
-                              onClick={(event) => handleClick(event, row.name)}
+                              onClick={(event) => handleClick(event, row.title)}
                               role="checkbox"
                               aria-checked={isItemSelected}
                               tabIndex={-1}
-                              key={row.name}
+                              key={row.title}
                               selected={isItemSelected}
                             >
                               <TableCell padding="checkbox">
@@ -459,18 +455,18 @@ export default function EnhancedTable({ data }) {
                                   </div>
                                 </Fade>
                               </Modal>
-
                               <TableCell
                                 component="th"
                                 id={labelId}
                                 scope="row"
                                 padding="none"
+                                style={{ display: (visibilityColums.subtitle ? "" : "none") }}
                               >{books.title}
                               </TableCell>
-                              <TableCell align="right">{books.subtitle}</TableCell>
-                              <TableCell align="right">{books.isbn13}</TableCell>
-                              <TableCell align="right">{books.price}</TableCell>
-                              <TableCell align="right">{books.url}</TableCell>
+                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.subtitle}</TableCell>
+                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.isbn13}</TableCell>
+                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.price}</TableCell>
+                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.url}</TableCell>
                             </TableRow>
                           </>
                         );

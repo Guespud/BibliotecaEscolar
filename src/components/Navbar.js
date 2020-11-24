@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar({datacheck}) {
   const classes = useStyles();
-console.log(datacheck,'datacheck')
 
 const handleSave = () =>{
   const configColums = localStorage.getItem('booksChecked');
