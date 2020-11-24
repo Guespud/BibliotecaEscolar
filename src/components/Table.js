@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../App.css";
 import clsx from "clsx";
@@ -24,23 +24,61 @@ import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ModalTableColums from "./ModalTableColums";
 import Modal from "@material-ui/core/Modal";
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 import BookImg from "./BookImg";
+import SidebarTableColums from "./SiderbarTableColums";
+
+const headCells = [
+  {
+    id: 1,
+    numeric: false,
+    disablePadding: true,
+    display: true,
+    label: "Title",
+  },
+  {
+    id: 2,
+    numeric: true,
+    disablePadding: false,
+    display: true,
+    label: "Subtitle",
+  },
+  {
+    id: 3,
+    numeric: true,
+    disablePadding: false,
+    display: true,
+    label: "Isbn13",
+  },
+  {
+    id: 4,
+    numeric: true,
+    disablePadding: false,
+    display: true,
+    label: "Price",
+  },
+  {
+    id: 5,
+    numeric: true,
+    disablePadding: false,
+    display: true,
+    label: "Url",
+  },
+];
 
 //------Modal------
 
 const useStylesModal = makeStyles((theme) => ({
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -134,21 +172,12 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const columsCheck = localStorage.getItem("");
-
 export function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
-  const headCells = [
-    { id: 1, numeric: false, disablePadding: true, label: "Title" },
-    { id: 2, numeric: true, disablePadding: false, label: "Subtitle" },
-    { id: 3, numeric: true, disablePadding: false, label: "Isbn13" },
-    { id: 4, numeric: true, disablePadding: false, label: "Price" },
-    { id: 5, numeric: true, disablePadding: false, label: "Url" },
-  ];
 
   return (
     <TableHead>
@@ -163,6 +192,9 @@ export function EnhancedTableHead(props) {
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
+            style={{
+              display: headCell.display ? "" : "none",
+            }}
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "default"}
@@ -254,7 +286,7 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Button className={classes.affected} color="inherit" >
+        <Button className={classes.affected} color="inherit">
           <AiIcons.AiOutlinePlus />
         </Button>
       )}
@@ -268,7 +300,7 @@ EnhancedTableToolbar.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   affected: {
-    textAlign: 'right',
+    textAlign: "right",
   },
   root: {
     width: "100%",
@@ -306,13 +338,34 @@ export default function EnhancedTable({ data }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [visibilityColums, setVisibilityColums] = useState({
-    tittle: true,
-    subtitle:true,
+    title: true,
+    subtitle: true,
     isbn: true,
-    price:true,
-    url:true,
-
+    price: true,
+    url: true,
   });
+
+  const handleColumsCheckbox = (checked, value) => {
+
+    checked.forEach(item =>{
+      if(item == value){
+        const head = headCells.find(elem => elem.label === value)
+        const newVisibilityColums = {...visibilityColums}
+        newVisibilityColums['title'] = !newVisibilityColums.title
+        setVisibilityColums(newVisibilityColums)
+        if (head){
+          head.display = !head.display
+        }
+      }
+    })
+
+  };
+  const [dataCheck, setDataCheck] = useState([]);
+
+  useEffect(() => {
+    setDataCheck(localStorage.getItem("booksChecked"));
+    console.log(dataCheck, "dataprueba");
+  }, [localStorage.getItem("booksChecked")]);
 
   const handleOpen = () => {
     setOpenModal(true);
@@ -383,7 +436,7 @@ export default function EnhancedTable({ data }) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -451,7 +504,7 @@ export default function EnhancedTable({ data }) {
                               >
                                 <Fade in={openModal}>
                                   <div className={classesModal.paper}>
-                                  <BookImg img={books.image} />
+                                    <BookImg img={books.image} />
                                   </div>
                                 </Fade>
                               </Modal>
@@ -460,13 +513,46 @@ export default function EnhancedTable({ data }) {
                                 id={labelId}
                                 scope="row"
                                 padding="none"
-                                style={{ display: (visibilityColums.subtitle ? "" : "none") }}
-                              >{books.title}
+                                style={{
+                                  display: visibilityColums.title ? "" : "none",
+                                }}
+                              >
+                                {books.title}
                               </TableCell>
-                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.subtitle}</TableCell>
-                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.isbn13}</TableCell>
-                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.price}</TableCell>
-                              <TableCell style={{ display: (visibilityColums.subtitle ? "" : "none") }} align="right">{books.url}</TableCell>
+                              <TableCell
+                                style={{
+                                  display: visibilityColums.subtitle
+                                    ? ""
+                                    : "none",
+                                }}
+                                align="right"
+                              >
+                                {books.subtitle}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  display: visibilityColums.isbn ? "" : "none",
+                                }}
+                                align="right"
+                              >
+                                {books.isbn13}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  display: visibilityColums.price ? "" : "none",
+                                }}
+                                align="right"
+                              >
+                                {books.price}
+                              </TableCell>
+                              <TableCell
+                                style={{
+                                  display: visibilityColums.url ? "" : "none",
+                                }}
+                                align="right"
+                              >
+                                {books.url}
+                              </TableCell>
                             </TableRow>
                           </>
                         );
@@ -511,7 +597,7 @@ export default function EnhancedTable({ data }) {
           </IconButton>
         </div>
         <Divider />
-        <ModalTableColums />
+        <SidebarTableColums onCheckboxChange={handleColumsCheckbox} />
       </Drawer>
     </div>
   );
