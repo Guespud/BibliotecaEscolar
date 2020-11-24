@@ -10,11 +10,12 @@ import * as FaIcons from "react-icons/fa";
 const useStyles = makeStyles((theme) => ({
   palette: {
     primary: {
-      main: '#008394',
+      main: '#127430',
+      background: 'white',
     }
   },
   root: {
-    flexGrow: 1,
+    flexGrow: 1,  
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -28,6 +29,11 @@ export default function Navbar({datacheck}) {
   const classes = useStyles();
 console.log(datacheck,'datacheck')
 
+const handleSave = () =>{
+  const configColums = localStorage.getItem('booksChecked');
+  localStorage.setItem('configColums',configColums);
+}
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -35,7 +41,7 @@ console.log(datacheck,'datacheck')
           <Typography variant="h6" className={classes.title}>
             BIBLIOTECA ESCOLAR
           </Typography>
-          <Button color="inherit" onClick><FiIcons.FiSave /></Button>
+          <Button color="inherit" onClick={handleSave}><FiIcons.FiSave /></Button>
           <Button color="inherit"><FaIcons.FaDownload /></Button>
         </Toolbar>
       </AppBar>

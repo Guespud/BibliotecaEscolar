@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "../App.css";
 import clsx from "clsx";
@@ -256,7 +256,7 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Button color="inherit">
+        <Button className={classes.affected} color="inherit" >
           <AiIcons.AiOutlinePlus />
         </Button>
       )}
@@ -269,6 +269,9 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  affected: {
+    textAlign: 'right',
+  },
   root: {
     width: "100%",
   },
@@ -304,6 +307,14 @@ export default function EnhancedTable({ data }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [visibilityColums, setVisibilityColums] = useState({
+    tittle: true,
+    subtitle:true,
+    isbn: true,
+    price:true,
+    url:true,
+
+  })
 
   console.log(data, "data en table");
 
@@ -454,15 +465,10 @@ export default function EnhancedTable({ data }) {
                                 id={labelId}
                                 scope="row"
                                 padding="none"
-                              >
-                                {books.title}
+                              >{books.title}
                               </TableCell>
-                              <TableCell align="right">
-                                {books.subtitle}
-                              </TableCell>
-                              <TableCell className="isbn" align="right">
-                                {books.isbn13}
-                              </TableCell>
+                              <TableCell align="right">{books.subtitle}</TableCell>
+                              <TableCell align="right">{books.isbn13}</TableCell>
                               <TableCell align="right">{books.price}</TableCell>
                               <TableCell align="right">{books.url}</TableCell>
                             </TableRow>

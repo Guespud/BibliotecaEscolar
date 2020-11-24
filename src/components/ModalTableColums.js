@@ -5,10 +5,19 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
-import Navbar from "./Navbar";
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
+      menuButton: {
+        marginRight: theme.spacing(2),
+      },
+      title: {
+        flexGrow: 1,
+      },
   root: {
+    flexGrow: 1,
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
@@ -20,6 +29,7 @@ export default function ModalTableColums() {
   const [checked, setChecked] = React.useState([]);
 
   console.log(checked, "checkeados");
+  localStorage.setItem('booksChecked',checked);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -35,6 +45,15 @@ export default function ModalTableColums() {
   };
 
   return (
+      <>
+    <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+            TABLE COLUMS
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <h3>Books</h3>
     <List dense className={classes.root}>
       {["title", "subtitle", "isbn13", "price", "url"].map((value) => {
         const labelId = `checkbox-list-secondary-label-${value}`;
@@ -53,5 +72,7 @@ export default function ModalTableColums() {
         );
       })}
     </List>
+    </>
   );
 }
+
