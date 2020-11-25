@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SidebarTableColums({onCheckboxChange}) {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([]);
+  const [checked, setChecked] = React.useState(["title", "subtitle", "isbn13", "price", "url"]);
 
   localStorage.setItem("booksChecked", checked);
 
@@ -41,7 +41,7 @@ export default function SidebarTableColums({onCheckboxChange}) {
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
-      newChecked.splice(currentIndex, 1);
+      newChecked.splice(currentIndex, value);
     }
     setChecked(newChecked);
   };
@@ -57,7 +57,7 @@ export default function SidebarTableColums({onCheckboxChange}) {
       </AppBar>
       <h3>Books</h3>
       <List dense className={classes.root}>
-        {["Title", "Subtitle", "Isbn13", "Price", "Url"].map((value) => {
+        {["title", "subtitle", "isbn13", "price", "url"].map((value) => {
           const labelId = `checkbox-list-secondary-label-${value}`;
           return (
             <ListItem key={value} button>

@@ -36,35 +36,35 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     display: true,
-    label: "Title",
+    label: "title",
   },
   {
     id: 2,
     numeric: true,
     disablePadding: false,
     display: true,
-    label: "Subtitle",
+    label: "subtitle",
   },
   {
     id: 3,
     numeric: true,
     disablePadding: false,
     display: true,
-    label: "Isbn13",
+    label: "isbn13",
   },
   {
     id: 4,
     numeric: true,
     disablePadding: false,
     display: true,
-    label: "Price",
+    label: "price",
   },
   {
     id: 5,
     numeric: true,
     disablePadding: false,
     display: true,
-    label: "Url",
+    label: "url",
   },
 ];
 
@@ -340,7 +340,7 @@ export default function EnhancedTable({ data }) {
   const [visibilityColums, setVisibilityColums] = useState({
     title: true,
     subtitle: true,
-    isbn: true,
+    isbn13: true,
     price: true,
     url: true,
   });
@@ -351,7 +351,7 @@ export default function EnhancedTable({ data }) {
       if(item == value){
         const head = headCells.find(elem => elem.label === value)
         const newVisibilityColums = {...visibilityColums}
-        newVisibilityColums['title'] = !newVisibilityColums.title
+        newVisibilityColums[value] = !newVisibilityColums[value]
         setVisibilityColums(newVisibilityColums)
         if (head){
           head.display = !head.display
@@ -531,7 +531,7 @@ export default function EnhancedTable({ data }) {
                               </TableCell>
                               <TableCell
                                 style={{
-                                  display: visibilityColums.isbn ? "" : "none",
+                                  display: visibilityColums.isbn13 ? "" : "none",
                                 }}
                                 align="right"
                               >
